@@ -1,19 +1,17 @@
 # RMIT SEPT 2020 Major Project
 
-# Group 00
+# Group 5.WED-16.30-1
 
 ## Members
-* SURNAME, GivenName (sXXXX)
-* SURNAME, GivenName (sXXXX)
-* SURNAME, GivenName (sXXXX)
-* SURNAME, GivenName (sXXXX)
-* SURNAME, GivenName (sXXXX)
+* RADLEY, Stephen (s3725184)
+* KAUR, Surinder (s3785282)
+* WANG, Ke (s3750989)
+* Guo, Shenwei (s3693073)
 
 ## Records
 
-* Github repository : https://github.com/RMIT-SEPT/MajorProject/Groupx
-* ClickUp Workspace : https://app.clickup.com/xxxx/yyyy
-
+* Github repository : https://github.com/RMIT-SEPT/majorproject-5-wed-16-30-1
+* Trello: https://trello.com/b/kJT2hqfi/sept5wed-1630-1
 
 ## Code documentation
 
