@@ -17,6 +17,8 @@ public class OwnerAuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         // Retrieve user from database.
         // If user doesn't exist, return 401 Unauthorized.
+        AuthResponse response = new AuthResponse("Invalid username or password.", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(response, response.getStatus());
 
         // Check that password hash matches.
         // If password doesn't match, return 401 Unauthorized.
@@ -24,8 +26,8 @@ public class OwnerAuthController {
         // Initialise user session.
 
         // Return 200 OK.
-        AuthResponse response = new AuthResponse("Successfully logged in.", HttpStatus.OK);
-        return new ResponseEntity<>(response, response.getStatus());
+        //AuthResponse response = new AuthResponse("Successfully logged in.", HttpStatus.OK);
+        //return new ResponseEntity<>(response, response.getStatus());
     }
 
     @PostMapping("/api/auth/owner/register")
