@@ -6,7 +6,8 @@ public class DatabaseConnection {
 
     private Connection conn;
 
-    public DatabaseConnection() throws SQLException {
+    public DatabaseConnection() throws SQLException, ClassNotFoundException {
+        Class.forName("org.hsqldb.jdbc.JDBCDriver");
         conn = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/main");
 
         if (conn != null) {
@@ -31,40 +32,45 @@ public class DatabaseConnection {
         statement.executeUpdate("DROP TABLE WORKER;");
     }
 
-    public void initialise() throws SQLException {
-        createOwnerTable();
-        createCustomerTable();
-        createWorkerTable();
+    public void initialise() {
+        try {
+            createOwnerTable();
+            createCustomerTable();
+            createWorkerTable();
+        }
+        catch (SQLException e) {
+            // do nothing
+        }
     }
 
     private void createOwnerTable() throws SQLException {
         Statement statement = conn.createStatement();
 
-        statement.executeUpdate("CREATE TABLE OWNER (" +
-                "username VARCHAR(20) NOT NULL," +
-                "passwordHash CHAR(64) NOT NULL," +
-                "PRIMARY KEY (username)" +
+        statement.executeUpdate("CREATE TABLE OWNER (\n" +
+                "username VARCHAR(20) NOT NULL,\n" +
+                "passwordHash CHAR(64) NOT NULL,\n" +
+                "PRIMARY KEY (username)\n" +
                 ");");
     }
 
     private void createCustomerTable() throws SQLException {
         Statement statement = conn.createStatement();
 
-        statement.executeUpdate("CREATE TABLE CUSTOMER (" +
-                "username VARCHAR(20) NOT NULL," +
-                "passwordHash CHAR(64) NOT NULL," +
-                "PRIMARY KEY (username)" +
+        statement.executeUpdate("CREATE TABLE CUSTOMER (\n" +
+                "username VARCHAR(20) NOT NULL,\n" +
+                "passwordHash CHAR(64) NOT NULL,\n" +
+                "PRIMARY KEY (username)\n" +
                 ");");
     }
 
     private void createWorkerTable() throws SQLException {
         Statement statement = conn.createStatement();
 
-        statement.executeUpdate("CREATE TABLE WORKER (" +
-                "username VARCHAR(20) NOT NULL," +
-                "passwordHash CHAR(64) NOT NULL," +
-                "PRIMARY KEY (username)" +
-                ");");
+        statement.executeUpdate("CREATE TABLE WORKER (\n" +
+                "username VARCHAR(20) NOT NULL,\n" +
+                "passwordHash CHAR(64) NOT NULL,\n" +
+                "PRIMARY KEY (username)\n" +
+                ");\n");
     }
 
     public boolean execute(String query) throws SQLException {

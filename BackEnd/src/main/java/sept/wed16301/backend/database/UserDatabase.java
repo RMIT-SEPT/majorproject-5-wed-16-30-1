@@ -11,8 +11,13 @@ public class UserDatabase {
 
     private DatabaseConnection conn;
 
-    public UserDatabase() throws SQLException {
+    public UserDatabase() throws SQLException, ClassNotFoundException {
         conn = new DatabaseConnection();
+
+        if (System.getenv("RESET_DB") != null) {
+            conn.reset();
+        }
+
         conn.initialise();
     }
 
@@ -59,36 +64,36 @@ public class UserDatabase {
     }
 
     public User getOwner(String username) throws SQLException {
-        ResultSet result = conn.query("SELECT username, passwordHash FROM OWNER" +
+        ResultSet result = conn.query("SELECT username, passwordHash FROM OWNER\n" +
                 "WHERE username = '" + username + "';");
 
         if (!result.next()) {
             return null;
         }
 
-        return new User(result.getString("username"), result.getString("password"));
+        return new User(result.getString("username"), result.getString("passwordHash"));
     }
 
     public User getCustomer(String username) throws SQLException {
-        ResultSet result = conn.query("SELECT username, passwordHash FROM CUSTOMER" +
+        ResultSet result = conn.query("SELECT username, passwordHash FROM CUSTOMER\n" +
                 "WHERE username = '" + username + "';");
 
         if (!result.next()) {
             return null;
         }
 
-        return new User(result.getString("username"), result.getString("password"));
+        return new User(result.getString("username"), result.getString("passwordHash"));
     }
 
     public User getWorker(String username) throws SQLException {
-        ResultSet result = conn.query("SELECT username, passwordHash FROM WORKER" +
+        ResultSet result = conn.query("SELECT username, passwordHash FROM WORKER\n" +
                 "WHERE username = '" + username + "';");
 
         if (!result.next()) {
             return null;
         }
 
-        return new User(result.getString("username"), result.getString("password"));
+        return new User(result.getString("username"), result.getString("passwordHash"));
     }
 
 }
