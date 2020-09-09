@@ -30,4 +30,5 @@ public class LoginRequest {
         // Set isHashed boolean flag to true, and set password to it's hashed value.
         return stringBuilder.toString();
     }
+
 }
