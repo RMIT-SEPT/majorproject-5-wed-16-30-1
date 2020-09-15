@@ -1,5 +1,7 @@
 package sept.wed16301.backend.auth.customer;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,15 @@ public class CustomerAuthControllerTests {
         this.customerAuthController = new CustomerAuthController();
     }
 
+    @BeforeAll
+    static void setUpPreRequisites() {
+        CustomerAuthController customerAuthController = new CustomerAuthController();
+
+        // Pre register a user
+        RegisterRequest registerRequest = new RegisterRequest("testcustomer1", "password123", "password123");
+        ResponseEntity<AuthResponse> authResponse = customerAuthController.register(registerRequest);
+    }
+
     @Test
     void loginValidDetails() {
         // Ensure that a user with the username "testcustomer1", and password "password123" exists in the customer
@@ -34,7 +45,7 @@ public class CustomerAuthControllerTests {
     }
 
     @Test
-    void loginWrongPassword() {
+    void loginWrongUsername() {
         // Ensure that no user with the username "testcustomer2" and password "password123" exists in the customer
         // database.
 
@@ -48,7 +59,7 @@ public class CustomerAuthControllerTests {
     }
 
     @Test
-    void loginWrongUsername() {
+    void loginWrongPassword() {
         // Ensure that a user with the username "testcustomer1", but without the password "123password" exists in the
         // customer database.
 
@@ -96,6 +107,7 @@ public class CustomerAuthControllerTests {
         // If 201 Created returned, then the test is a failure.
         assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
     }
+
     @Test
     void registerPasswordsNoMatch() {
         // Test the register function.
@@ -109,7 +121,12 @@ public class CustomerAuthControllerTests {
 
         // If 409 Conflict returned, then the test is a success.
         // If 201 Created returned, then the test is a failure.
-        assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @AfterAll
+    static void tearDown() {
+        //Clear database
     }
 
 }
