@@ -2,6 +2,8 @@ package sept.wed16301.backend.auth.worker;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import sept.wed16301.backend.auth.AuthResponse;
 import sept.wed16301.backend.auth.LoginRequest;
 import sept.wed16301.backend.auth.RegisterRequest;
+import sept.wed16301.backend.database.UserDatabase;
 
 @SpringBootTest
 public class WorkerAuthControllerTests {
@@ -17,6 +20,22 @@ public class WorkerAuthControllerTests {
 
     public WorkerAuthControllerTests() {
         workerAuthController = new WorkerAuthController();
+    }
+
+    @BeforeAll
+    static void setUp() throws Exception {
+        UserDatabase users = new UserDatabase();
+        users.reset();
+
+        //Create new worker with username "testworker1" and password "password123" in the worker database
+        RegisterRequest registerRequest = new RegisterRequest("testworker1", "password123", "password123");
+        users.createWorker(registerRequest);
+    }
+
+    @AfterAll
+    static void tearDown() throws Exception {
+        UserDatabase users = new UserDatabase();
+        users.reset();
     }
 
     @Test
@@ -33,7 +52,7 @@ public class WorkerAuthControllerTests {
     }
 
     @Test
-    void loginWrongPassword() {
+    void loginWrongUsername() {
         // Ensure that no user with the username "testworker2" and password "password123" exists in the worker database.
 
         // Test the login function.
@@ -46,7 +65,7 @@ public class WorkerAuthControllerTests {
     }
 
     @Test
-    void loginWrongUsername() {
+    void loginWrongPassword() {
         // Ensure that a user with the username "testworker1", but without the password "123password" exists in the
         // worker database.
 
@@ -98,7 +117,7 @@ public class WorkerAuthControllerTests {
     @Test
     void registerPasswordsNoMatch() {
         // Test the register function.
-        RegisterRequest registerRequest = new RegisterRequest("testworker1", "password", "password123");
+        RegisterRequest registerRequest = new RegisterRequest("testworker4", "password", "password123");
         ResponseEntity<AuthResponse> authResponse = workerAuthController.register(registerRequest);
 
         // If 201 Created returned, delete the "testworker1" user recently added to the worker database.
@@ -106,9 +125,9 @@ public class WorkerAuthControllerTests {
             // Delete "testworker1" from the worker database.
         }
 
-        // If 409 Conflict returned, then the test is a success.
+        // If 400 Bad Request returned, then the test is a success.
         // If 201 Created returned, then the test is a failure.
-        assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
 }
