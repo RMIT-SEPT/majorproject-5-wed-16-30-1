@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import sept.wed16301.backend.auth.AuthResponse;
 import sept.wed16301.backend.auth.LoginRequest;
 import sept.wed16301.backend.auth.RegisterRequest;
+import sept.wed16301.backend.database.UserDatabase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,12 +23,19 @@ public class CustomerAuthControllerTests {
     }
 
     @BeforeAll
-    static void setUpPreRequisites() {
-        CustomerAuthController customerAuthController = new CustomerAuthController();
+    static void setUp() throws Exception {
+        UserDatabase users = new UserDatabase();
+        users.reset();
 
-        // Pre register a user
+        // Create new customer with username "testcustomer1" and password "password123" in the customer database.
         RegisterRequest registerRequest = new RegisterRequest("testcustomer1", "password123", "password123");
-        ResponseEntity<AuthResponse> authResponse = customerAuthController.register(registerRequest);
+        users.createCustomer(registerRequest);
+    }
+
+    @AfterAll
+    static void tearDown() throws Exception {
+        UserDatabase users = new UserDatabase();
+        users.reset();
     }
 
     @Test
@@ -111,7 +119,7 @@ public class CustomerAuthControllerTests {
     @Test
     void registerPasswordsNoMatch() {
         // Test the register function.
-        RegisterRequest registerRequest = new RegisterRequest("testcustomer1", "password", "password123");
+        RegisterRequest registerRequest = new RegisterRequest("testcustomer4", "password", "password123");
         ResponseEntity<AuthResponse> authResponse = customerAuthController.register(registerRequest);
 
         // If 201 Created returned, delete the "testcustomer1" user recently added to the customer database.
@@ -119,14 +127,9 @@ public class CustomerAuthControllerTests {
             // Delete "testcustomer1" from the customer database.
         }
 
-        // If 409 Conflict returned, then the test is a success.
+        // If 400 Bad Request returned, then the test is a success.
         // If 201 Created returned, then the test is a failure.
         assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @AfterAll
-    static void tearDown() {
-        //Clear database
     }
 
 }
