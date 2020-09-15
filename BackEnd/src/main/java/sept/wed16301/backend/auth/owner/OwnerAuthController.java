@@ -52,6 +52,7 @@ public class OwnerAuthController {
         // If password doesn't match, return 401 Unauthorized.
         try {
             // IDE linting is weird here, users.getOwner can indeed return null.
+            System.out.println("PASSWORD HASH: " + loginRequest.getPasswordHash());
             if (owner == null || !owner.getPasswordHash().equals(loginRequest.getPasswordHash())) {
                 response = new AuthResponse("Invalid username or password.", HttpStatus.UNAUTHORIZED);
                 return new ResponseEntity<>(response, response.getStatus());

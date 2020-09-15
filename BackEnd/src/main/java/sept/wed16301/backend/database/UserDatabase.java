@@ -21,6 +21,11 @@ public class UserDatabase {
         conn.initialise();
     }
 
+    public void reset() throws SQLException {
+        conn.reset();
+        conn.initialise();
+    }
+
     public boolean createOwner(RegisterRequest registerRequest) throws SQLException {
         String username = registerRequest.getUsername();
         String passwordHash;

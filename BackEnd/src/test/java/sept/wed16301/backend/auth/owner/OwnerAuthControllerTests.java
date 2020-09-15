@@ -1,5 +1,7 @@
 package sept.wed16301.backend.auth.owner;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import sept.wed16301.backend.auth.AuthResponse;
 import sept.wed16301.backend.auth.LoginRequest;
 import sept.wed16301.backend.auth.RegisterRequest;
+import sept.wed16301.backend.database.UserDatabase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,8 +18,24 @@ public class OwnerAuthControllerTests {
 
     private OwnerAuthController ownerAuthController;
 
-    public OwnerAuthControllerTests() {
+    public OwnerAuthControllerTests() throws Exception {
         this.ownerAuthController = new OwnerAuthController();
+    }
+
+    @BeforeAll
+    static void setUp() throws Exception {
+        UserDatabase users = new UserDatabase();
+        users.reset();
+
+        // Add user "testowner1", with password "password123" to owner database.
+        RegisterRequest registerRequest = new RegisterRequest("testowner1", "password123", "password123");
+        users.createOwner(registerRequest);
+    }
+
+    @AfterAll
+    static void tearDown() throws Exception {
+        UserDatabase users = new UserDatabase();
+        users.reset();
     }
 
     @Test
@@ -108,7 +127,7 @@ public class OwnerAuthControllerTests {
 
         // If 409 Conflict returned, then the test is a success.
         // If 201 Created returned, then the test is a failure.
-        assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
 }

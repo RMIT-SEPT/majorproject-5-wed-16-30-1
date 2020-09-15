@@ -25,7 +25,7 @@ public class RegisterRequest {
     public String getPasswordHash() throws java.security.NoSuchAlgorithmException {
         // Generate password hash.
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encDigest = digest.digest();
+        byte[] encDigest = digest.digest(password.getBytes());
 
         // Convert to string.
         StringBuilder stringBuilder = new StringBuilder();
