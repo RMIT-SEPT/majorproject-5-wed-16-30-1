@@ -88,11 +88,6 @@ public class CustomerAuthControllerTests {
         RegisterRequest registerRequest = new RegisterRequest("testcustomer3", "password123", "password123");
         ResponseEntity<AuthResponse> authResponse = customerAuthController.register(registerRequest);
 
-        // If 201 Created returned, delete the "testcustomer3" user recently added to the customer database.
-        if (authResponse.getStatusCode() == HttpStatus.CREATED) {
-            // Delete "testcustomer3" from the customer database.
-        }
-
         // If 201 Created returned, then the test is a success.
         // If 409 Conflict returned, then the test is a failure.
         assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -121,11 +116,6 @@ public class CustomerAuthControllerTests {
         // Test the register function.
         RegisterRequest registerRequest = new RegisterRequest("testcustomer4", "password", "password123");
         ResponseEntity<AuthResponse> authResponse = customerAuthController.register(registerRequest);
-
-        // If 201 Created returned, delete the "testcustomer1" user recently added to the customer database.
-        if (authResponse.getStatusCode() == HttpStatus.CREATED) {
-            // Delete "testcustomer1" from the customer database.
-        }
 
         // If 400 Bad Request returned, then the test is a success.
         // If 201 Created returned, then the test is a failure.

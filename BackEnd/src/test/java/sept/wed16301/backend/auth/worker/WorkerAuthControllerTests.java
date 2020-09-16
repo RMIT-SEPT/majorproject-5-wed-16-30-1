@@ -86,11 +86,6 @@ public class WorkerAuthControllerTests {
         RegisterRequest registerRequest = new RegisterRequest("testworker3", "password123", "password123");
         ResponseEntity<AuthResponse> authResponse = workerAuthController.register(registerRequest);
 
-        // If 201 Created returned, delete the "testworker3" user recently added to the worker database.
-        if (authResponse.getStatusCode() == HttpStatus.CREATED) {
-            // Delete "testworker3" from the worker database.
-        }
-
         // If 201 Created returned, then the test is a success.
         // If 409 Conflict returned, then the test is a failure.
         assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -104,11 +99,6 @@ public class WorkerAuthControllerTests {
         RegisterRequest registerRequest = new RegisterRequest("testworker1", "password123", "password123");
         ResponseEntity<AuthResponse> authResponse = workerAuthController.register(registerRequest);
 
-        // If 201 Created returned, delete the "testworker1" user recently added to the worker database.
-        if (authResponse.getStatusCode() == HttpStatus.CREATED) {
-            // Delete "testworker1" from the worker database.
-        }
-
         // If 409 Conflict returned, then the test is a success.
         // If 201 Created returned, then the test is a failure.
         assertThat(authResponse.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
@@ -119,11 +109,6 @@ public class WorkerAuthControllerTests {
         // Test the register function.
         RegisterRequest registerRequest = new RegisterRequest("testworker4", "password", "password123");
         ResponseEntity<AuthResponse> authResponse = workerAuthController.register(registerRequest);
-
-        // If 201 Created returned, delete the "testworker1" user recently added to the worker database.
-        if (authResponse.getStatusCode() == HttpStatus.CREATED) {
-            // Delete "testworker1" from the worker database.
-        }
 
         // If 400 Bad Request returned, then the test is a success.
         // If 201 Created returned, then the test is a failure.
