@@ -23,12 +23,10 @@ class CustomerLogin extends Component {
 		this.setState({ password: event.target.value});
 	}
 	handleSubmit(event) {
-		window.alert(this.state.username)
-        window.alert(this.state.password)
+        event.preventDefault();
 		customerLogin(this.state.username, this.state.password, this.handlePostSubmit);
 	}
 	handlePostSubmit(response) {
-		console.log(response);
 		if (response.status === 200) {
 			this.props.history.push('/customerdashboard');
 		}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export let customerLogin = (username, password, callback) => {
-	axios.post('/api/auth/customer/login',{
+  axios.post('/api/auth/customer/login',{
 		'username':username,
 		'password':password
 		})
@@ -14,7 +14,7 @@ export let customerLogin = (username, password, callback) => {
 }
 
 export let workerLogin = (username, password, callback) => {
-		axios.post('/api/auth/WorkerLogin.js',{
+		axios.post('/api/auth/worker/login',{
 			'username':username,
 			'password':password
 			})
@@ -28,8 +28,7 @@ export let workerLogin = (username, password, callback) => {
 
 
 export let ownerLogin = (username, password, callback) => {
-	alert(username,password);
-	axios.post('/api/auth/OwnerLogin.js',{
+	axios.post('/api/auth/owner/login',{
 		'username':username,
 		'password':password
 		})
@@ -42,7 +41,7 @@ export let ownerLogin = (username, password, callback) => {
 }
 
 export let ownerRegister = (username, password,checkPassword, callback) => {
-	axios.post('/api/auth/OwnerRegister.js',{
+	axios.post('/api/auth/owner/register',{
 		'username':username,
 		'password':password,
 		'checkPassword':checkPassword,
@@ -56,7 +55,7 @@ export let ownerRegister = (username, password,checkPassword, callback) => {
 }
 
 export let customerRegister = (username, password,checkPassword, callback) => {
-	axios.post('/api/auth/CustomerRegister.js',{
+	axios.post('/api/auth/customer/register',{
 		'username':username,
 		'password':password,
 		'checkPassword':checkPassword,

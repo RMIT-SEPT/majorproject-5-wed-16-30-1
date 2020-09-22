@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 
 import { workerLogin } from "../services.js";
 
@@ -29,11 +30,13 @@ class WorkerLogin extends Component{
     }
 
 	handleSubmit(event){
+        event.preventDefault();
         workerLogin(this.state.username,this.state.password,this.handlePostSubmit);
     }
 
     handlePostSubmit(response)
     {
+        const { history } = this.props;
 		console.log(response);
         if(response.status === 200)
         {
@@ -65,4 +68,4 @@ class WorkerLogin extends Component{
 	}
 }
 
-export default WorkerLogin;
+export default withRouter(WorkerLogin);
