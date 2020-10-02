@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import sept.wed16301.backend.auth.AuthResponse;
+import sept.wed16301.backend.Response;
 import sept.wed16301.backend.auth.LoginRequest;
 import sept.wed16301.backend.auth.RegisterRequest;
 import sept.wed16301.backend.database.UserDatabase;
@@ -44,7 +44,7 @@ public class OwnerAuthControllerTests {
 
         // Test the login function.
         LoginRequest loginRequest = new LoginRequest("testowner1", "password123");
-        ResponseEntity<AuthResponse> authResponse = ownerAuthController.login(loginRequest);
+        ResponseEntity<Response> authResponse = ownerAuthController.login(loginRequest);
 
         // If 200 OK returned, then the test is a success.
         // If 401 Unauthorized returned, then the test is a failure.
@@ -57,7 +57,7 @@ public class OwnerAuthControllerTests {
 
         // Test the login function.
         LoginRequest loginRequest = new LoginRequest("testowner2", "password123");
-        ResponseEntity<AuthResponse> authResponse = ownerAuthController.login(loginRequest);
+        ResponseEntity<Response> authResponse = ownerAuthController.login(loginRequest);
 
         // If 401 Unauthorized returned, then the test is a success.
         // If 200 OK returned, then the test is a failure.
@@ -71,7 +71,7 @@ public class OwnerAuthControllerTests {
 
         // Test the login function.
         LoginRequest loginRequest = new LoginRequest("testowner1", "123password");
-        ResponseEntity<AuthResponse> authResponse = ownerAuthController.login(loginRequest);
+        ResponseEntity<Response> authResponse = ownerAuthController.login(loginRequest);
 
         // If 401 Unauthorized returned, then the test is a success.
         // If 200 OK returned, then the test is a failure.
@@ -84,7 +84,7 @@ public class OwnerAuthControllerTests {
 
         // Test the register function.
         RegisterRequest registerRequest = new RegisterRequest("testowner3", "password123", "password123");
-        ResponseEntity<AuthResponse> authResponse = ownerAuthController.register(registerRequest);
+        ResponseEntity<Response> authResponse = ownerAuthController.register(registerRequest);
 
         // If 201 Created returned, delete the "testowner3" user recently added to the owner database.
         if (authResponse.getStatusCode() == HttpStatus.CREATED) {
@@ -102,7 +102,7 @@ public class OwnerAuthControllerTests {
 
         // Test the register function.
         RegisterRequest registerRequest = new RegisterRequest("testowner1", "password123", "password123");
-        ResponseEntity<AuthResponse> authResponse = ownerAuthController.register(registerRequest);
+        ResponseEntity<Response> authResponse = ownerAuthController.register(registerRequest);
 
         // If 201 Created returned, delete the "testowner1" user recently added to the owner database.
         if (authResponse.getStatusCode() == HttpStatus.CREATED) {
@@ -118,7 +118,7 @@ public class OwnerAuthControllerTests {
     void registerPasswordsNoMatch() {
         // Test the register function.
         RegisterRequest registerRequest = new RegisterRequest("testowner1", "password", "password123");
-        ResponseEntity<AuthResponse> authResponse = ownerAuthController.register(registerRequest);
+        ResponseEntity<Response> authResponse = ownerAuthController.register(registerRequest);
 
         // If 201 Created returned, delete the "testowner1" user recently added to the owner database.
         if (authResponse.getStatusCode() == HttpStatus.CREATED) {
