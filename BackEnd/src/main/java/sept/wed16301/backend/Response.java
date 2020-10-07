@@ -1,13 +1,13 @@
-package sept.wed16301.backend.auth;
+package sept.wed16301.backend;
 
 import org.springframework.http.HttpStatus;
 
-public class AuthResponse {
+public class Response {
 
     private String message;
     private HttpStatus status;
 
-    public AuthResponse(String message, HttpStatus status) {
+    public Response(String message, HttpStatus status) {
         this.message = message;
         this.status = status;
     }
