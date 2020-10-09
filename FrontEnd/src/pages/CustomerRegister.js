@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { customerRegister } from "../services";
+
 
 
 class CustomerRegister extends Component {
@@ -11,7 +11,7 @@ class CustomerRegister extends Component {
             username: "",
             password: "",
             checkpassowrd: "",
-            errorMessage: "",
+
 
         }
         this.handleSubmit=this.handleSubmit.bind(this)
@@ -36,23 +36,20 @@ class CustomerRegister extends Component {
     }
 
     handleSubmit = (event) => {
-      event.preventDefault();
-      customerRegister(this.state.username, this.state.password, this.state.checkpassowrd, this.handlePostSubmit);
+        alert(`${this.state.username}   Registered Successfully !!!!`)
+        console.log(this.state);
+        this.setState({
+            username: "",
+            password: "",
+            checkpassword: "",
+            
+        })
+     event.preventDefault()
+        
     }
 
 
-    handlePostSubmit = (response) => {
-        const { history } = this.props;
-        if(response.status === 201)
-        {
-			alert('Successful registration!');
-            history.push('/CustomerLogin.js');
-		}
-        else
-        {
-			this.setState({errorMessage:response.data.message});
-		}
-    }
+
 
     render() {
         return (
@@ -60,9 +57,6 @@ class CustomerRegister extends Component {
 
                 <form onSubmit={this.handleSubmit}>
                     <h1>Customer Registration</h1>
-                      {this.state.errorMessage !== "" &&
-                          <p>{this.state.errorMessage}</p>
-                      }
                     <label>Username:</label> <input type="text" value={this.state.username} onChange={this.usernamehandler} placeholder="Username..." /><br />
                     
                     <label>Password :</label> <input type="password" value={this.state.password} onChange={this.passwordhandler} placeholder="Password..." /><br />

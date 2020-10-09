@@ -1,22 +1,20 @@
 import React, { Component } from 'react'
-import { ownerRegister } from '../services';
+
+
 
 class OwnerRegister extends Component {
     constructor(props) {
         super(props)
 
-        this.state = {     
+        this.state = {
+           
             username: "",
             password: "",
             checkpassowrd: "",
-            errorMessage: "",
-        }
 
+
+        }
         this.handleSubmit=this.handleSubmit.bind(this)
-        this.usernameHandler = this.usernamehandler.bind(this);
-        this.passwordhandler = this.passwordhandler.bind(this);
-        this.checkpasswordhandler = this.checkpasswordhandler.bind(this);
-        this.handlePostSubmit = this.handlePostSubmit.bind(this);
     }
 
     usernamehandler = (event) => {
@@ -38,34 +36,27 @@ class OwnerRegister extends Component {
     }
 
     handleSubmit = (event) => {
-      event.preventDefault();
-      ownerRegister(this.state.username, this.state.password, this.state.checkpassowrd, this.handlePostSubmit);
+        alert(`${this.state.username}   Registered Successfully !!!!`)
+        console.log(this.state);
+        this.setState({
+            username: "",
+            password: "",
+            checkpassword: "",
+            
+        })
+     event.preventDefault()
         
     }
 
 
-    handlePostSubmit = (response) => { 
-        console.log(response);
-        const { history } = this.props;
-        if(response.status === 201)
-        {
-			alert('Successful registration!');
-            history.push('/OwnerLogin.js');
-		}
-        else
-        {
-			this.setState({errorMessage:response.data.message});
-		}
-    }
+
 
     render() {
         return (
             <div>
+
                 <form onSubmit={this.handleSubmit}>
                     <h1>Owner Registration</h1>
-                    {this.state.errorMessage !== "" &&
-                        <p>{this.state.errorMessage}</p>
-                    }
                     <label>Username:</label> <input type="text" value={this.state.username} onChange={this.usernamehandler} placeholder="Username..." /><br />
                     
                     <label>Password :</label> <input type="password" value={this.state.password} onChange={this.passwordhandler} placeholder="Password..." /><br />
