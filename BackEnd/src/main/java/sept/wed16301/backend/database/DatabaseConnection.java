@@ -30,6 +30,10 @@ public class DatabaseConnection {
         // Drop the worker table.
         statement = conn.createStatement();
         statement.executeUpdate("DROP TABLE WORKER;");
+
+        // Drop the booking table.
+        statement = conn.createStatement();
+        statement.executeUpdate("DROP TABLE BOOKING;");
     }
 
     public void initialise() {
@@ -37,6 +41,7 @@ public class DatabaseConnection {
             createOwnerTable();
             createCustomerTable();
             createWorkerTable();
+            createBookingTable();
         }
         catch (SQLException e) {
             // do nothing
@@ -70,7 +75,19 @@ public class DatabaseConnection {
                 "username VARCHAR(20) NOT NULL,\n" +
                 "passwordHash CHAR(64) NOT NULL,\n" +
                 "PRIMARY KEY (username)\n" +
-                ");\n");
+                ");");
+    }
+
+    private void createBookingTable() throws SQLException {
+        Statement statement = conn.createStatement();
+
+        statement.executeUpdate("CREATE TABLE OWNER (\n" +
+                "serviceID TEXT NOT NULL,\n" +
+                "workerName TEXT NOT NULL,\n" +
+                "serviceName TEXT NOT NULL,\n" +
+                "serviceDate TEXT NOT NULL,\n" +
+                "PRIMARY KEY (serviceID)\n" +
+                ");");
     }
 
     public boolean execute(String query) throws SQLException {

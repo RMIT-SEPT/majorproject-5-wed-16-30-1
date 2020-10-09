@@ -15,7 +15,7 @@ public class UserDatabase {
         conn = new DatabaseConnection();
 
         if (System.getenv("RESET_DB") != null) {
-            conn.reset();
+            this.reset();
         }
 
         conn.initialise();
