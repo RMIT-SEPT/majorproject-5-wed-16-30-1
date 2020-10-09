@@ -31,6 +31,7 @@ public class BookingDatabase {
         return conn.execute(
             "INSERT INTO BOOKING VALUES (" +
             "'" + bookingRequest.getServiceID() + "', " +
+            "'" + bookingRequest.getCustomerUsername() + "', " +
             "'" + bookingRequest.getWorkerName() + "', " +
             "'" + bookingRequest.getServiceName() + "', " +
             "'" + bookingRequest.getServiceDate() + "');"
@@ -46,19 +47,21 @@ public class BookingDatabase {
 
         return new Booking(
                 result.getString("serviceID"),
+                result.getString("customerUsername"),
                 result.getString("workerName"),
                 result.getString("serviceName"),
                 result.getString("serviceDate")
         );
     }
 
-    public ArrayList<Booking> getBookings() throws SQLException {
-        ResultSet result = conn.query("SELECT * FROM BOOKING;");
+    public ArrayList<Booking> getBookings(String customerUsername) throws SQLException {
+        ResultSet result = conn.query("SELECT * FROM BOOKING WHERE customerUsername='" + customerUsername + "';");
 
         ArrayList<Booking> bookings = new ArrayList<>();
         while (!result.next()) {
             bookings.add(new Booking(
                     result.getString("serviceID"),
+                    result.getString("customerUsername"),
                     result.getString("workerName"),
                     result.getString("serviceName"),
                     result.getString("serviceDate")

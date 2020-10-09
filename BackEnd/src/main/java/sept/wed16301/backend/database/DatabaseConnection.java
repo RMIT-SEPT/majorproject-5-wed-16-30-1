@@ -83,10 +83,12 @@ public class DatabaseConnection {
 
         statement.executeUpdate("CREATE TABLE OWNER (\n" +
                 "serviceID TEXT NOT NULL,\n" +
+                "customerUsername VARCHAR(20) NOT NULL,\n" +
                 "workerName TEXT NOT NULL,\n" +
                 "serviceName TEXT NOT NULL,\n" +
                 "serviceDate TEXT NOT NULL,\n" +
-                "PRIMARY KEY (serviceID)\n" +
+                "PRIMARY KEY (serviceID),\n" +
+                "FORIEGN KEY (customerUsername) REFERENCES CUSTOMER(username),\n" +
                 ");");
     }
 

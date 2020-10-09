@@ -29,7 +29,7 @@ public class BookingDatabaseTests {
         databaseConnection.reset();
         databaseConnection.initialise();
 
-        databaseConnection.execute("INSERT INTO BOOKING VALUES ('xyz', 'Steve', '@xyz', '1/1/2021');");
+        databaseConnection.execute("INSERT INTO BOOKING VALUES ('xyz', 'Customer1', 'Steve', '@xyz', '1/1/2021');");
 
     }
 
@@ -45,7 +45,7 @@ public class BookingDatabaseTests {
     @Test
     void createValidBooking() throws SQLException, ClassNotFoundException {
         // Create a Booking in the database
-        BookingRequest bookingRequest = new BookingRequest("abcd", "Steve", "@abcd", "10/10/2020");
+        BookingRequest bookingRequest = new BookingRequest("abcd", "Customer1", "Steve", "@abcd", "10/10/2020");
         assertThat(bookings.createBooking(bookingRequest)).isEqualTo(true);
 
         // Check if new booking as added to the database.
@@ -61,7 +61,7 @@ public class BookingDatabaseTests {
 
     @Test
     void deleteValidBooking() throws SQLException, ClassNotFoundException {
-        BookingRequest bookingRequest = new BookingRequest("xyz", "Steve", "@xyz", "1/1/2021");
+        BookingRequest bookingRequest = new BookingRequest("xyz", "Customer1", "Steve", "@xyz", "1/1/2021");
         assertThat(bookings.deleteBooking(bookingRequest)).isEqualTo(true);
     }
 
