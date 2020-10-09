@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 public class BookingController {
-    @PutMapping("api/booking/")
+    @PutMapping("/api/booking/")
     public ResponseEntity<Response> createBooking(@RequestBody BookingRequest bookingRequest) {
         Response response;
 
@@ -21,8 +21,10 @@ public class BookingController {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @GetMapping("api/booking/")
-    public List<?> getBookings(@RequestBody BookingRequest bookingRequest) {
+    @GetMapping("/api/booking/")
+    public List<?> getBookings(@RequestParam String customerUsername) {
+        // e.g. usage: /api/booking/?customerUsername=Customer1
+
         Response response;
 
         //Connect with database
@@ -32,7 +34,7 @@ public class BookingController {
         return new ArrayList<Object>();
     }
 
-    @DeleteMapping("api/booking/")
+    @DeleteMapping("/api/booking/")
     public ResponseEntity<Response> deleteBooking(@RequestBody BookingRequest bookingRequest) {
         Response response;
 
