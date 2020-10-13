@@ -111,52 +111,10 @@ public class BookingController {
 
                 //Get the end time for new booking request
                 currBookingEndTime = booking.getServiceDate().plusMinutes(booking.getDuration());
-                System.out.println();
 
-                System.out.println("Booking Request: start - " + bookingRequest.getServiceDate().toString() + " end - " + newBookingEndTime.toString());
-                System.out.println("Customer Booking: start - " + booking.getServiceDate().toString() + " end - " + currBookingEndTime.toString());
-
-
-//                DateRangesOverlap = max(start1, start2) < min(end1, end2)
-
-                // DateRangesOverlap = max(start1, start2) < min(end1, end2)
-//                LocalDateTime maxStart = bookingRequest.getServiceDate();
-//                if(booking.getServiceDate().isAfter(bookingRequest.getServiceDate())) {
-//                    maxStart = booking.getServiceDate();
-//                }
-//
-//
-//                LocalDateTime minEnd = newBookingEndTime;
-//                if(currBookingEndTime.isBefore(newBookingEndTime)) {
-//                    minEnd = currBookingEndTime;
-//                }
-
-//
-//                if(maxStart.isBefore(minEnd)) {
-//                    overLapOccurs = true;
-//                }
-
-
-//                //overlap is true if startFirst.endTime.isAfter(other.startTime)
-//                if(bookingRequest.getServiceDate().isBefore(booking.getServiceDate())) {
-//                    System.out.println("startsFirst = booking request");
-//                    overLapOccurs = newBookingEndTime.isAfter(booking.getServiceDate());
-//                } else {
-////                    startsFirst = currBooking
-//                    System.out.println("startsFirst = currBooking");
-//                    overLapOccurs = currBookingEndTime.isAfter(bookingRequest.getServiceDate());
-//
-//                }
-
-                // !t1.end.isBefore(t2.begin) && !t1.begin.isAfter(t2.end);
-                overLapOccurs = !(currBookingEndTime.isBefore(newBookingEndTime)) &&
-                        !(booking.getServiceDate().isAfter(bookingRequest.getServiceDate()));
-                System.out.println();
-
-//                if((StartDate1 <= EndDate2) && (StartDate2 <= EndDate1)) {
-//                    //overlapping dates
-//                }
-//                overLapOccurs = booking.getServiceDate().isBefore(newBookingEndTime) && bookingRequest.getServiceDate().isBefore(currBookingEndTime);
+                if(booking.getServiceDate().isBefore(newBookingEndTime) && bookingRequest.getServiceDate().isBefore(currBookingEndTime)) {
+                    overLapOccurs = true;
+                }
             }
         }
 

@@ -85,7 +85,7 @@ public class BookingControllerTests {
     void createBookingInPast() {
         //Ensure booking cannot be made in the past
 
-        BookingRequest bookingRequest = new BookingRequest("4" ,"testcustomer01", "testworker2", "Harold Plumping", LocalDateTime.now().minusDays(1), 60);
+        BookingRequest bookingRequest = new BookingRequest("4" ,"testcustomer01", "testworker2", "Harold Plumping", LocalDateTime.now().minusDays(5), 60);
         ResponseEntity<Response> createBookingResponse = bookingController.createBooking(bookingRequest);
 
         assertThat(createBookingResponse.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
