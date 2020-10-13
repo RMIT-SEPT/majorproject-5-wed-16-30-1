@@ -23,6 +23,10 @@ public class DatabaseConnection {
         Statement statement = conn.createStatement();
         statement.executeUpdate("DROP TABLE OWNER;");
 
+        // Drop the booking table.
+        statement = conn.createStatement();
+        statement.executeUpdate("DROP TABLE BOOKING;");
+
         // Drop the customer table.
         statement = conn.createStatement();
         statement.executeUpdate("DROP TABLE CUSTOMER;");
@@ -30,10 +34,6 @@ public class DatabaseConnection {
         // Drop the worker table.
         statement = conn.createStatement();
         statement.executeUpdate("DROP TABLE WORKER;");
-
-        // Drop the booking table.
-        statement = conn.createStatement();
-        statement.executeUpdate("DROP TABLE BOOKING;");
     }
 
     public void initialise() {
@@ -81,14 +81,15 @@ public class DatabaseConnection {
     private void createBookingTable() throws SQLException {
         Statement statement = conn.createStatement();
 
-        statement.executeUpdate("CREATE TABLE OWNER (\n" +
-                "serviceID TEXT NOT NULL,\n" +
+        statement.executeUpdate("CREATE TABLE BOOKING (\n" +
+                "serviceID VARCHAR(20) NOT NULL,\n" +
                 "customerUsername VARCHAR(20) NOT NULL,\n" +
-                "workerName TEXT NOT NULL,\n" +
-                "serviceName TEXT NOT NULL,\n" +
-                "serviceDate TEXT NOT NULL,\n" +
+                "workerName VARCHAR(20) NOT NULL,\n" +
+                "serviceName VARCHAR(20) NOT NULL,\n" +
+                "serviceDate VARCHAR(30) NOT NULL,\n" +
+                "duration INT,\n" +
                 "PRIMARY KEY (serviceID),\n" +
-                "FORIEGN KEY (customerUsername) REFERENCES CUSTOMER(username),\n" +
+                "FOREIGN KEY (customerUsername) REFERENCES CUSTOMER(username),\n" +
                 ");");
     }
 

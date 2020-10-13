@@ -9,6 +9,11 @@ import sept.wed16301.backend.Booking;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+//import java.time.LocalDate;
+import java.time.LocalDateTime;
+//import java.util.Calendar;
+//import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,7 +34,14 @@ public class BookingDatabaseTests {
         databaseConnection.reset();
         databaseConnection.initialise();
 
-        databaseConnection.execute("INSERT INTO BOOKING VALUES ('xyz', 'Customer1', 'Steve', '@xyz', '1/1/2021');");
+//        Calendar bookingTime = Calendar.getInstance();
+//        bookingTime.setTime(new Date());
+//        bookingTime.add(Calendar.DATE, 6);
+
+
+        databaseConnection.execute("INSERT INTO CUSTOMER VALUES ('testcustomer1', 'password123');");
+
+        databaseConnection.execute("INSERT INTO BOOKING VALUES ('xyz', 'testcustomer1', 'Steve', '@xyz', '" + LocalDateTime.now().plusDays(6).toString() + "', 60);");
 
     }
 
@@ -43,9 +55,9 @@ public class BookingDatabaseTests {
     }
 
     @Test
-    void createValidBooking() throws SQLException, ClassNotFoundException {
+    void createValidBooking() throws SQLException, ClassNotFoundException, ParseException {
         // Create a Booking in the database
-        BookingRequest bookingRequest = new BookingRequest("abcd", "Customer1", "Steve", "@abcd", "10/10/2020");
+        BookingRequest bookingRequest = new BookingRequest("abcd", "testcustomer1", "Steve", "@abcd", LocalDateTime.now(), 60);
         assertThat(bookings.createBooking(bookingRequest)).isEqualTo(true);
 
         // Check if new booking as added to the database.
@@ -61,7 +73,7 @@ public class BookingDatabaseTests {
 
     @Test
     void deleteValidBooking() throws SQLException, ClassNotFoundException {
-        BookingRequest bookingRequest = new BookingRequest("xyz", "Customer1", "Steve", "@xyz", "1/1/2021");
+        BookingRequest bookingRequest = new BookingRequest("xyz", "testcustomer1", "Steve", "@xyz", LocalDateTime.now(), 60);
         assertThat(bookings.deleteBooking(bookingRequest)).isEqualTo(true);
     }
 
