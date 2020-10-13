@@ -1,0 +1,31 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/openjdk:stretch
+    steps:
+      - checkout:
+          path: ~/BackEnd
+      - run: ./mvnw test
+
+  build:
+    docker:
+      - image: circleci/openjdk:stretch
+    steps:
+      - run:
+          command: ./database.sh
+          background: true
+      - checkout:
+          path: ~/BackEnd
+      - run: ./mvnw -Dmaven.test.skip=true package
+
+workflows:
+  version: 2.1
+
+  build-then-test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
