@@ -1,8 +1,6 @@
 package sept.wed16301.backend.database;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import sept.wed16301.backend.booking.BookingRequest;
 import sept.wed16301.backend.Booking;
@@ -10,10 +8,7 @@ import sept.wed16301.backend.Booking;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-//import java.time.LocalDate;
 import java.time.LocalDateTime;
-//import java.util.Calendar;
-//import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,18 +21,13 @@ public class BookingDatabaseTests {
         bookings = new BookingDatabase();
     }
 
-    @BeforeAll
-    static void setUp() throws SQLException, ClassNotFoundException {
+    @BeforeEach //All
+    void setUp() throws SQLException, ClassNotFoundException {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 
         //Initialize the database
         databaseConnection.reset();
         databaseConnection.initialise();
-
-//        Calendar bookingTime = Calendar.getInstance();
-//        bookingTime.setTime(new Date());
-//        bookingTime.add(Calendar.DATE, 6);
-
 
         databaseConnection.execute("INSERT INTO CUSTOMER VALUES ('testcustomer1', 'password123');");
 
@@ -45,8 +35,8 @@ public class BookingDatabaseTests {
 
     }
 
-    @AfterAll
-    static void tearDown() throws SQLException, ClassNotFoundException {
+    @AfterEach //All
+    void tearDown() throws SQLException, ClassNotFoundException {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 
         //Clean up the Database
@@ -66,11 +56,17 @@ public class BookingDatabaseTests {
     }
 
     @Test
-    void getValidBookings() throws SQLException, ClassNotFoundException {
+    void getValidBookings() throws SQLException, ClassNotFoundException, ParseException {
         // Not implemented yet.
-        assertThat(0).isEqualTo(1);
+
+        assertThat(bookings.getBookings("testcustomer1").size()).isEqualTo(1);
     }
 
+    @Test
+    void getAllBookings() throws SQLException, ParseException {
+
+        assertThat(bookings.getAllBookings().size()).isEqualTo(1);
+    }
     @Test
     void deleteValidBooking() throws SQLException, ClassNotFoundException {
         BookingRequest bookingRequest = new BookingRequest("xyz", "testcustomer1", "Steve", "@xyz", LocalDateTime.now(), 60);

@@ -46,6 +46,7 @@ public class BookingController {
             customer = users.getCustomer(bookingRequest.getCustomerUsername());
         } catch (Exception e) {
             response = new Response("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(response.getMessage() + "when trying to retrieve customer bookings");
             return  new ResponseEntity<>(response, response.getStatus());
         }
 
@@ -63,12 +64,13 @@ public class BookingController {
             //Check that new booking doesn't overlap with customer's existing bookings
             if(DateRangesOverlap(bookingRequest, customerBookings)) {
                 response = new Response("Booking overlaps with an existing booking", HttpStatus.CONFLICT);
+                System.out.println(response.getMessage());
                 return new ResponseEntity<>(response, response.getStatus());
             }
         }
 
         //Check that service ID is unique
-        List<Booking> allBookings = null;
+        List<Booking> allBookings;
         try {
             allBookings = bookingDatabase.getAllBookings();
         } catch (Exception e) {
@@ -76,7 +78,7 @@ public class BookingController {
             return  new ResponseEntity<>(response, response.getStatus());
         }
 
-        if(allBookings != null) {
+        if(allBookings.size() > 0) {
             for(Booking booking : allBookings) {
                 if(booking.getServiceID().equals(bookingRequest.getServiceID())) {
                     response = new Response("Service ID is not unique", HttpStatus.CONFLICT);
@@ -86,7 +88,7 @@ public class BookingController {
         }
 
         //Check if new booking is created in the past
-        if(bookingRequest.getServiceDate().compareTo(LocalDateTime.now()) < 0) {
+        if(bookingRequest.getServiceDate().isBefore(LocalDateTime.now())) {
             response = new Response("Cannot create a booking in the past", HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(response, response.getStatus());
         }
@@ -98,46 +100,63 @@ public class BookingController {
     private boolean DateRangesOverlap(BookingRequest bookingRequest, List<Booking> userBookings) {
         boolean overLapOccurs = false;
 
+        //Print booking intervals:
+
         //Get the end time for new booking request
         LocalDateTime newBookingEndTime = bookingRequest.getServiceDate().plusMinutes(bookingRequest.getDuration());
 
-//        Calendar endTimeCalendar = Calendar.getInstance();
-//        endTimeCalendar.setTime(bookingRequest.getServiceDate());
-//        endTimeCalendar.add(Calendar.MINUTE, bookingRequest.getDuration());
-//        Date newBookingEndTime = endTimeCalendar.getTime();
-
-
+        LocalDateTime currBookingEndTime;
         if(userBookings != null) {
             for (Booking booking : userBookings) {
+
                 //Get the end time for new booking request
-                LocalDateTime currBookingEndTime = booking.getServiceDate().plusMinutes(booking.getDuration());
+                currBookingEndTime = booking.getServiceDate().plusMinutes(booking.getDuration());
+                System.out.println();
 
-//                Calendar currEndTimeCalendar = Calendar.getInstance();
-//                currEndTimeCalendar.setTime(bookingRequest.getServiceDate());
-//                currEndTimeCalendar.add(Calendar.MINUTE, bookingRequest.getDuration());
-//                Date currBookingEndTime = currEndTimeCalendar.getTime();
+                System.out.println("Booking Request: start - " + bookingRequest.getServiceDate().toString() + " end - " + newBookingEndTime.toString());
+                System.out.println("Customer Booking: start - " + booking.getServiceDate().toString() + " end - " + currBookingEndTime.toString());
 
+
+//                DateRangesOverlap = max(start1, start2) < min(end1, end2)
 
                 // DateRangesOverlap = max(start1, start2) < min(end1, end2)
+//                LocalDateTime maxStart = bookingRequest.getServiceDate();
+//                if(booking.getServiceDate().isAfter(bookingRequest.getServiceDate())) {
+//                    maxStart = booking.getServiceDate();
+//                }
+//
+//
+//                LocalDateTime minEnd = newBookingEndTime;
+//                if(currBookingEndTime.isBefore(newBookingEndTime)) {
+//                    minEnd = currBookingEndTime;
+//                }
 
-                LocalDateTime maxStart = bookingRequest.getServiceDate();
-                if(booking.getServiceDate().compareTo(bookingRequest.getServiceDate()) > 0) {
-                    maxStart = booking.getServiceDate();
-                }
-
-                LocalDateTime minEnd = newBookingEndTime;
-                if(currBookingEndTime.compareTo(newBookingEndTime) < 0) {
-                    minEnd = currBookingEndTime;
-                }
-
-                if(maxStart.compareTo(minEnd) < 0) {
-                    overLapOccurs = true;
-                }
-
-//                if(Math.max(booking.getServiceDate().toEpochSecond(ZoneOffset.UTC), bookingRequest.getServiceDate().toEpochSecond(ZoneOffset.UTC))
-//                        < Math.min(currBookingEndTime.toEpochSecond(ZoneOffset.UTC), newBookingEndTime.toEpochSecond(ZoneOffset.UTC))) {
+//
+//                if(maxStart.isBefore(minEnd)) {
 //                    overLapOccurs = true;
 //                }
+
+
+//                //overlap is true if startFirst.endTime.isAfter(other.startTime)
+//                if(bookingRequest.getServiceDate().isBefore(booking.getServiceDate())) {
+//                    System.out.println("startsFirst = booking request");
+//                    overLapOccurs = newBookingEndTime.isAfter(booking.getServiceDate());
+//                } else {
+////                    startsFirst = currBooking
+//                    System.out.println("startsFirst = currBooking");
+//                    overLapOccurs = currBookingEndTime.isAfter(bookingRequest.getServiceDate());
+//
+//                }
+
+                // !t1.end.isBefore(t2.begin) && !t1.begin.isAfter(t2.end);
+                overLapOccurs = !(currBookingEndTime.isBefore(newBookingEndTime)) &&
+                        !(booking.getServiceDate().isAfter(bookingRequest.getServiceDate()));
+                System.out.println();
+
+//                if((StartDate1 <= EndDate2) && (StartDate2 <= EndDate1)) {
+//                    //overlapping dates
+//                }
+//                overLapOccurs = booking.getServiceDate().isBefore(newBookingEndTime) && bookingRequest.getServiceDate().isBefore(currBookingEndTime);
             }
         }
 
@@ -182,16 +201,10 @@ public class BookingController {
         }
 
         //Check that booking is more than 48 hours away
-
-        //Get date 'MINIMUM_HOURS_AWAY_TO_DELETE_BOOKING' hours away
-        LocalDateTime minBookingHours = bookingRequest.getServiceDate().plusHours(MINIMUM_HOURS_AWAY_TO_DELETE_BOOKING);
-
-//        Calendar minBookingHours = Calendar.getInstance();
-//        minBookingHours.setTime(new Date());
-//        minBookingHours.add(Calendar.HOUR_OF_DAY, MINIMUM_HOURS_AWAY_TO_DELETE_BOOKING);
-
-        if(bookingRequest.getServiceDate().compareTo(minBookingHours) < 0) { //.before(minBookingHours.getTime())) {
+        LocalDateTime minBookingHours = LocalDateTime.now().plusHours(MINIMUM_HOURS_AWAY_TO_DELETE_BOOKING);
+        if(bookingRequest.getServiceDate().isBefore(minBookingHours)) { //.before(minBookingHours.getTime())) {
             response = new Response("Cannot delete a booking in the past or less than 48 hours away", HttpStatus.BAD_REQUEST);
+            System.out.println(response.getMessage());
             return new ResponseEntity<>(response, response.getStatus());
         }
 
