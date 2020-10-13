@@ -19,6 +19,8 @@ import CustomerBooking from './pages/CustomerBooking';
 import CustomerDashboard from './components/CustomerDashboard';
 import CustomerView from './components/Customer/CustoemerView';
 import AddBooking from './components/Customer/AddBooking';
+import Profile from './components/Profile/Profile';
+import eProfile from './components/Profile/eProfile';
 
 function App() {
   return (
@@ -40,9 +42,10 @@ function App() {
       <Route exact path="/CustomerRegister.js" component={CustomerRegister} />
       <Route exact path="/OwnerRegister.js" component={OwnerRegister} />
 	    <Route exact path="/CustomerBooking.js" component={ CustomerBooking} />
-  
       <Route exact path="/addBooking" component={ AddBooking} />
       <Route exact path="/CustomerView.js" component={ CustomerView} />
+	  <Route exact path="/Profile.js" component={Profile} />
+	  <Route exact path="/eProfile.js" component={eProfile} />
     </div>
     </Router>
   );
