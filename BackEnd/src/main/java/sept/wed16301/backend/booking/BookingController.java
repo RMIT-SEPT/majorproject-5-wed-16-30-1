@@ -9,6 +9,7 @@ import sept.wed16301.backend.User;
 import sept.wed16301.backend.database.BookingDatabase;
 import sept.wed16301.backend.database.UserDatabase;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,6 @@ public class BookingController {
             customer = users.getCustomer(bookingRequest.getCustomerUsername());
         } catch (Exception e) {
             response = new Response("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
-            System.out.println(response.getMessage() + "when trying to retrieve customer bookings");
             return  new ResponseEntity<>(response, response.getStatus());
         }
 
@@ -64,7 +64,6 @@ public class BookingController {
             //Check that new booking doesn't overlap with customer's existing bookings
             if(DateRangesOverlap(bookingRequest, customerBookings)) {
                 response = new Response("Booking overlaps with an existing booking", HttpStatus.CONFLICT);
-                System.out.println(response.getMessage());
                 return new ResponseEntity<>(response, response.getStatus());
             }
         }
@@ -91,6 +90,14 @@ public class BookingController {
         if(bookingRequest.getServiceDate().isBefore(LocalDateTime.now())) {
             response = new Response("Cannot create a booking in the past", HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(response, response.getStatus());
+        }
+
+        //Create a booking
+        try {
+            bookingDatabase.createBooking(bookingRequest);
+        } catch(Exception e) {
+            response = new Response("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+            return  new ResponseEntity<>(response, response.getStatus());
         }
 
         response = new Response("Booking was Successful", HttpStatus.CREATED);
@@ -160,13 +167,11 @@ public class BookingController {
 
         //Check that booking is more than 48 hours away
         LocalDateTime minBookingHours = LocalDateTime.now().plusHours(MINIMUM_HOURS_AWAY_TO_DELETE_BOOKING);
-        if(bookingRequest.getServiceDate().isBefore(minBookingHours)) { //.before(minBookingHours.getTime())) {
+        if(bookingRequest.getServiceDate().isBefore(minBookingHours)) {
             response = new Response("Cannot delete a booking in the past or less than 48 hours away", HttpStatus.BAD_REQUEST);
             System.out.println(response.getMessage());
             return new ResponseEntity<>(response, response.getStatus());
         }
-
-        //TODO Check that booking request match to booking at given id:
 
         //Delete the booking
         try {
