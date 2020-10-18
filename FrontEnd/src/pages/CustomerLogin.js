@@ -28,6 +28,7 @@ class CustomerLogin extends Component {
 	}
 	handlePostSubmit(response) {
 		if (response.status === 200) {
+            localStorage.setItem('customerUsername', this.state.username);
 			this.props.history.push('/customerdashboard');
 		}
 		else {
