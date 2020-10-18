@@ -23,6 +23,10 @@ public class DatabaseConnection {
         Statement statement = conn.createStatement();
         statement.executeUpdate("DROP TABLE OWNER;");
 
+        // Drop the booking table.
+        statement = conn.createStatement();
+        statement.executeUpdate("DROP TABLE BOOKING;");
+
         // Drop the customer table.
         statement = conn.createStatement();
         statement.executeUpdate("DROP TABLE CUSTOMER;");
@@ -37,6 +41,7 @@ public class DatabaseConnection {
             createOwnerTable();
             createCustomerTable();
             createWorkerTable();
+            createBookingTable();
         }
         catch (SQLException e) {
             // do nothing
@@ -70,7 +75,22 @@ public class DatabaseConnection {
                 "username VARCHAR(20) NOT NULL,\n" +
                 "passwordHash CHAR(64) NOT NULL,\n" +
                 "PRIMARY KEY (username)\n" +
-                ");\n");
+                ");");
+    }
+
+    private void createBookingTable() throws SQLException {
+        Statement statement = conn.createStatement();
+
+        statement.executeUpdate("CREATE TABLE BOOKING (\n" +
+                "serviceID VARCHAR(20) NOT NULL,\n" +
+                "customerUsername VARCHAR(20) NOT NULL,\n" +
+                "workerName VARCHAR(20) NOT NULL,\n" +
+                "serviceName VARCHAR(20) NOT NULL,\n" +
+                "serviceDate VARCHAR(30) NOT NULL,\n" +
+                "duration INT,\n" +
+                "PRIMARY KEY (serviceID),\n" +
+                "FOREIGN KEY (customerUsername) REFERENCES CUSTOMER(username),\n" +
+                ");");
     }
 
     public boolean execute(String query) throws SQLException {

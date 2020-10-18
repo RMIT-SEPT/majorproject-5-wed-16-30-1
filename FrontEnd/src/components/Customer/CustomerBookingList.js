@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class WorkerBookingList extends Component {
+class CustomerBookingList extends Component {
 	render() { 
 	return(
 <div className="container">
@@ -8,18 +8,18 @@ class WorkerBookingList extends Component {
                                 <div className="row">
                                     <div className="col-lg-6 col-md-4 col-8">
                                         <h3>update your schedule</h3>
-                                        <p>You can make and view your booking here.</p>
+                                        <p>You can see your profile or updat your personal information here.</p>
                                     </div>
                                     <div className="col-md-4 d-none d-lg-block">
                                         <ul className="list-group">
-                                            <a href="#">
+                                            <a href="/components/Profile/Profile.js">
                                                 <li className="list-group-item board">
                                                     <i className="fa fa-flag-checkered pr-1">Update your profile</i>
                                                 </li>
                                             </a>
-                                            <a href="#">
+                                            <a href="CustomerView.js">
                                                 <li className="list-group-item update">
-                                                    <i className="fa fa-edit pr-1">view your booking</i>
+                                                    <i className="fa fa-edit pr-1">View your CustomerBookingList</i>
                                                 </li>
                                             </a>
                                             <a href="">
@@ -36,4 +36,4 @@ class WorkerBookingList extends Component {
 	}
 }
 
-export default WorkerBookingList;
+export default CustomerBookingList;
