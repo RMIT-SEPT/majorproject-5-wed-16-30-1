@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import './CustomerView.css';
+import './CustomerView.css';   
 
-
-   
+import { getBookings } from '../../services';
 
 
 class CustomerView extends Component{
@@ -11,34 +10,50 @@ class CustomerView extends Component{
        super(props);
 
       this.state= {
-        services: [
-          { id: 1, name: 'Wasif', age: 21, email: 'wasif@email.com' },
-          { id: 2, name: 'Ali', age: 19, email: 'ali@email.com' },
-          { id: 3, name: 'Saad', age: 16, email: 'saad@email.com' },
-          { id: 4, name: 'Asad', age: 25, email: 'asad@email.com' }
-       ]
-   
+        services: [] 
       }; 
-      
+     
+        this.handleResponse = this.handleResponse.bind(this);
+        this.renderTableHeader = this.renderTableHeader.bind(this);
     }
 
-    deleteHandler= (id) => {
+    componentDidMount() {
+      getBookings(localStorage.getItem('customerUsername'), this.handleResponse);
+    }
+
+    handleResponse(services) {
+      console.log(services);
+      if (services !== undefined) {
+        this.setState({ services: services.data });
+      }
+    }
+
+    deleteHandler= (service) => {
   
-      const services = this.state.services.filter(service => service.id !== id);
+      const services = this.state.services.filter(s => s.serviceID !== service.serviceID);
       this.setState({ services: services});
     }
  
     renderTableData() {
-      return this.state.services.map((services, index) => {
-         const { id, name, age, email } = services 
+      if (!Array.isArray(this.state.services)) {
+        return (<div></div>);
+      }
+      console.log(this.state.services);
+      if (this.state.services == undefined || this.state.services.length == 0) {
+        return (<div></div>);
+      }
+
+      return this.state.services.map((service, index) => { 
          return (
-            <tr key={id}>
-               <td>{id}</td>
-               <td>{name}</td>
-               <td>{age}</td>
-               <td>{email}</td>
+            <tr key={service.serviceID}>
+               <td>{service.serviceID}</td>
+               <td>{service.customerUsername}</td>
+               <td>{service.workerName}</td>
+               <td>{service.serviceName}</td>
+               <td>{service.serviceDate}</td>
+               <td>{service.duration}</td>
                <td className='opration'>
-               <button className='button' onClick={() => this.deleteHandler(id)}>Delete</button>
+               <button className='button' onClick={() => this.deleteHandler(service)}>Delete</button>
                     </td>
             </tr>
          )
@@ -48,6 +63,13 @@ class CustomerView extends Component{
 
 
     renderTableHeader() {
+      if (!Array.isArray(this.state.services)) {
+        return (<div></div>);
+      }
+      if (this.state.services == undefined || this.state.services.length == 0) {
+        return (<div></div>);
+      }
+
       let header = Object.keys(this.state.services[0])
       return header.map((key, index) => {
          return <th key={index}>{key.toUpperCase()}</th>
@@ -64,7 +86,7 @@ class CustomerView extends Component{
       <table id='service'>
          <tbody>
          <tr>{this.renderTableHeader()}</tr>
-                  {this.renderTableData()}
+             {this.renderTableData()}
          </tbody>
       </table>
    </div>

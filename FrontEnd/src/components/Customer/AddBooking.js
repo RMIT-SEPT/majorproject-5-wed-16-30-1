@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import { addBooking } from '../../services';
 
 class AddBooking extends Component {
 
@@ -7,17 +8,20 @@ class AddBooking extends Component {
             super(props);
     
             this.state= {
-            servicename: "",
-            serviceid: "",
-            desc: "",
-            start_date: "",
-            end_date: ""
-         
+              serviceID: '',
+              customerUsername: localStorage.getItem('customerUsername'),
+              workerName: 'default',
+              serviceName: '',
+              serviceDate: '',
+              duration: 60,
+
+              description: '',
+              endDate: ''
         }; 
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        
+        this.handleResponse= this.handleResponse.bind(this);
     }
     
     
@@ -25,24 +29,15 @@ class AddBooking extends Component {
             this.setState({[e.target.name]: e.target.value});
         }
 
-       serviceidhandler = (event) => {
-            this.setState({
-                serviceid: event.target.value
-            })
+        onSubmit(e){
+            e.preventDefault(); 
+            addBooking(this.state, this.handleResponse);
+            console.log(this.state);
         }
 
-        onSubmit(e){
-            alert(`${this.state.servicename}   Registered Successfully !!!!`)
-            e.preventDefault();
-            const newBooking = {
-                servicename: this.state.servicename,
-                serviceid: this.state.serviceid,
-                desc: this.state.desc,
-                start_date:this.state.start_date,
-                end_date: this.state.end_date  
-            }
-    
-            
+        handleResponse(res) {
+          console.log(res);
+          alert(res.data.message);
         }
 
      render(){
@@ -57,9 +52,9 @@ class AddBooking extends Component {
                             <div className="form-group">
                                 <input type="text" className="form-control form-control-lg " 
                                 placeholder="Service Name"
-                                name="servicename"
-                                value= {this.state.servicename}
-                                onChange = {this.onChange}
+                                name="serviceName"
+                                value={this.state.serviceName}
+                                onChange={this.onChange}
                                 />
                                 
                             </div>
@@ -70,8 +65,8 @@ class AddBooking extends Component {
                             <div className="form-group">
                                 <input type="text" className="form-control form-control-lg" 
                                 placeholder="service ID"
-                                name ="serviceid"
-                                value= {this.state.serviceid}
+                                name ="serviceID"
+                                value= {this.state.serviceID}
                                 onChange = {this.onChange}
                                     />
                             </div>
@@ -81,8 +76,8 @@ class AddBooking extends Component {
                             <div className="form-group">
                                 <textarea className="form-control form-control-lg" 
                                 placeholder="service description"
-                                name = "desc"
-                                value= {this.state.desc}
+                                name = "description"
+                                value= {this.state.description}
                                 onChange = {this.onChange}
                                 />
                                 
@@ -91,8 +86,8 @@ class AddBooking extends Component {
                             <h6>Start Date</h6>
                             <div className="form-group">
                                 <input type="date" className="form-control form-control-lg" 
-                           name="start_date"
-                           value= {this.state.start_date}
+                           name="serviceDate"
+                           value= {this.state.serviceDate}
                            onChange = {this.onChange}
                                 />
                             </div>
@@ -100,8 +95,8 @@ class AddBooking extends Component {
                             <h6>Estimated End Date</h6>
                             <div className="form-group">
                                 <input type="date" className="form-control form-control-lg" 
-                             name="end_date" 
-                                value= {this.state.end_date}
+                             name="endDate" 
+                                value= {this.state.endDate}
                                 onChange = {this.onChange}
                                 />
                             </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { useHistory } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { ownerLogin } from "../services.js";
 
 class OwnerLogin extends Component{
@@ -29,13 +29,14 @@ class OwnerLogin extends Component{
     }
 
 	handleSubmit(event){
+        event.preventDefault();
         ownerLogin(this.state.username,this.state.password,this.handlePostSubmit);
     }
 
     handlePostSubmit(response)
     {
-		let history = useHistory(); 
-		alert(response);
+        console.log(response);
+		const { history } = this.props; 
         if(response.status === 200)
         {
 			history.push('/ownerdashboard');
@@ -66,4 +67,4 @@ class OwnerLogin extends Component{
 	}
 }
 
-export default OwnerLogin;
+export default withRouter(OwnerLogin);
