@@ -23,13 +23,12 @@ class CustomerLogin extends Component {
 		this.setState({ password: event.target.value});
 	}
 	handleSubmit(event) {
-		window.alert(this.state.username)
-        window.alert(this.state.password)
+        event.preventDefault();
 		customerLogin(this.state.username, this.state.password, this.handlePostSubmit);
 	}
 	handlePostSubmit(response) {
-		console.log(response);
 		if (response.status === 200) {
+            localStorage.setItem('customerUsername', this.state.username);
 			this.props.history.push('/customerdashboard');
 		}
 		else {
@@ -37,15 +36,13 @@ class CustomerLogin extends Component {
 		}
 	}
 	render() {
-		const handleSubmit = this.props
-
 		return(
 		<div>
 		  <p>/login/customer</p>
 		  {this.state.errorMessage !== "" &&
 		  <p>{this.state.errorMessage}</p>
 	}
-		<form onSubmit={handleSubmit || this.handleSubmit}>
+		<form onSubmit={ this.handleSubmit}>
 		<input type="text" onChange={ this.handleUsernameChange }/>
 		<br />
 		<input type="password" onChange={ this.handlePasswordChange }/>

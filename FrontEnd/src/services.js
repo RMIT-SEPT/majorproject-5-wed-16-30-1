@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export let customerLogin = (username, password, callback) => {
-	axios.post('/api/auth/customer/login',{
+  axios.post('/api/auth/customer/login',{
 		'username':username,
 		'password':password
 		})
@@ -14,7 +14,7 @@ export let customerLogin = (username, password, callback) => {
 }
 
 export let workerLogin = (username, password, callback) => {
-		axios.post('/api/auth/WorkerLogin.js',{
+		axios.post('/api/auth/worker/login',{
 			'username':username,
 			'password':password
 			})
@@ -28,8 +28,7 @@ export let workerLogin = (username, password, callback) => {
 
 
 export let ownerLogin = (username, password, callback) => {
-	alert(username,password);
-	axios.post('/api/auth/OwnerLogin.js',{
+	axios.post('/api/auth/owner/login',{
 		'username':username,
 		'password':password
 		})
@@ -42,7 +41,7 @@ export let ownerLogin = (username, password, callback) => {
 }
 
 export let ownerRegister = (username, password,checkPassword, callback) => {
-	axios.post('/api/auth/OwnerRegister.js',{
+	axios.post('/api/auth/owner/register',{
 		'username':username,
 		'password':password,
 		'checkPassword':checkPassword,
@@ -56,7 +55,7 @@ export let ownerRegister = (username, password,checkPassword, callback) => {
 }
 
 export let customerRegister = (username, password,checkPassword, callback) => {
-	axios.post('/api/auth/CustomerRegister.js',{
+	axios.post('/api/auth/customer/register',{
 		'username':username,
 		'password':password,
 		'checkPassword':checkPassword,
@@ -69,34 +68,48 @@ export let customerRegister = (username, password,checkPassword, callback) => {
 	});
 }
 
-export let customerView = ( serviceid, workername,servicename,servicedate, callback) => {
-	axios.post('/api/auth/CustomerView.js',{
-		'serviceid':serviceid,
-		'workername':workername,
-		'servicenamed':servicename,
-		'servicedate':servicedate,
-		})
-	.then((response)=>{
-		callback(response);
-	})
-	.catch((error)=>{
-		callback(error.response);
-	});
+export let getBookings = (customerUsername, callback) => {
+  axios.get('/api/booking/' + customerUsername)
+    .then(res => {
+      callback(res);
+    })
+    .catch(err => {
+      callback(err.response);
+    });
 }
 
-           
-export let addBooking = ( servicename, serviceid,desc,start_date,end_date, callback) => {
-	axios.post('/api/auth/AddBooking.js',{
-		'servicename':servicename,
-		'serviceid': serviceid,
-		'des':desc,
-		'start_date':start_date,
-		'end_date':end_date,
-		})
-	.then((response)=>{
-		callback(response);
-	})
-	.catch((error)=>{
-		callback(error.response);
-	});
+export let addBooking = (booking, callback) => {
+  booking.serviceDate = booking.serviceDate + 'T00:00:00Z';
+  axios.put('/api/booking/', {
+      serviceID: booking.serviceID,
+      customerUsername: booking.customerUsername,
+      workerName: booking.workerName,
+      serviceName: booking.serviceName,
+      serviceDate: booking.serviceDate,
+      duration: booking.duration,
+    })
+    .then(res => {
+      callback(res);
+    })
+    .catch(err => {
+      callback(err.response);
+    });
 }
+
+export let delBooking = (booking, callback) => {
+  axios.delete('/api/booking/', {
+      serviceID: booking.serviceID,
+      customerUsername: booking.customerUsername,
+      workerName: booking.workerName,
+      serviceName: booking.serviceName,
+      serviceDate: booking.serviceDate + 'T00:00:00Z',
+      duration: booking.duration,
+    })
+    .then(res => {
+      callback(res);
+    })
+    .catch(err => {
+      callback(err.response);
+    });
+}
+
