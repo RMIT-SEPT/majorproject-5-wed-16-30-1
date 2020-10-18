@@ -14,7 +14,7 @@ class Header extends Component {
         <a class="nav-link" href="Home">Home <span class="sr-only">(current)</span></a>
       </li>
 	    <li class="nav-item">
-        <a class="nav-link" href="worker.js">Booking</a>
+        <a class="nav-link" href="CustomerBooking.js">Booking</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="Login">Log in</a>
